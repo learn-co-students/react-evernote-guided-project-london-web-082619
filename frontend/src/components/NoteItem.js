@@ -1,9 +1,9 @@
 import React from 'react';
 
-const NoteItem = (props) => (
-  <li>
-    <h2>Title</h2>
-    <p>Caption...</p>
+const NoteItem = ({title, body, noteItem}) => (
+  <li onClick={noteItem}>
+    <h2>{title}</h2>
+    <p>{body}</p>
   </li>
 );
 

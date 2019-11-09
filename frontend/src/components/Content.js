@@ -11,12 +11,26 @@ import Instructions from './Instructions';
           refactor to get this Content component to work.
 */
 class Content extends Component {
+  state ={
+    display: 'instructions'
+  }
+  
+  changeDisplay = (val) => this.setState({display: val})
+
   renderContent = () => {
-    if (false) {
-      return <NoteEditor />;
-    } else if (false) {
-      return <NoteViewer />;
-    } else {
+    if (this.state.display === 'edit') {
+      return <NoteEditor 
+      note={this.props.note}
+      handleEdit={this.props.updateNote}
+      changeDisplay={this.changeDisplay}
+      />;
+    } else if (this.props.note) {
+      return <NoteViewer 
+      content={this.props.note}
+      changeDisplay={this.changeDisplay}
+      removeNote={this.props.removeNote}
+      />;
+    } else  {
       return <Instructions />;
     }
   }
