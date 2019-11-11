@@ -18,6 +18,22 @@ class NoteEditor extends Component {
       id: this.props.note.id
     })
   }
+  componentDidUpdate(prevProps, prevState) {
+    console.log(this.props.note)
+    // this is called whenever props or state changes
+
+    // we need to store the new note in state
+    // when props.note is a newly-selected note
+    if(this.state.id !== this.props.note.id){
+
+      this.setState({
+        title: this.props.note.title,
+        body: this.props.note.body,
+        id: this.props.note.id
+      })
+    }
+  }
+  
   
   handleCancel = () => this.props.changeDisplay('instructions')
   handleSubmit = (e) =>{

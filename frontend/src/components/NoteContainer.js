@@ -5,7 +5,7 @@ import Content from './Content';
 
 const beasUrl = 'http://localhost:3000'
 const notesUrl = beasUrl + "/api/v1/notes"
-const fetchConfig = (url, body=null, method='GET') =>{
+const fetchConfig = (url, body, method='GET') =>{
   return fetch(url,{
     method: method,
     headers:{
@@ -26,6 +26,7 @@ class NoteContainer extends Component {
   state = {
     notes: [],
     content: null,
+    displayNote: "instructions",
     filterNotes: [],
     isFiltered: false
   }
@@ -37,28 +38,68 @@ class NoteContainer extends Component {
    }
   /***************************************************************************************/
 
-  displayContent = (selectedNote) => {
+  displayContent = (selectedNote, changeDisplay) => {
     this.setState({
-      content: selectedNote
+      content: selectedNote,
+      displayNote: changeDisplay
     })
   }
 
   updateNote = (editedNote) => {
     console.log(editedNote)
-    this.setState({
-      notes: this.state.notes.map(note => {
-        if (note.id === editedNote.id) return editedNote
-        return note
-      }),
-      content: editedNote
-    })
-    fetchConfig(notesUrl + '/' + editedNote.id, editedNote,"PATCH")
+    if(this.state.notes.find(note => note.id === editedNote.id)){
+      this.setState({
+        notes: this.state.notes.map(note => {
+          
+          if (note.id === editedNote.id) 
+            return editedNote
+          else
+            return note
+        }),
+        content: editedNote
+      })
+      fetchConfig(notesUrl + '/' + editedNote.id, editedNote,"PATCH")
+    }else {
+      this.createNote(editedNote)
+    }
+
   }
+  // updateNote = (editedNote) => {
+  //   console.log(editedNote)
+  //   this.setState({
+  //     notes: this.state.notes.map(note => {
+  //       // [note, note, editedNote, note] so if the note match edited note change it
+  //       if (note.id === editedNote.id) 
+  //         return editedNote
+  //       else
+  //         return note
+  //     }),
+  //     content: editedNote
+  //   })
+  //   fetchConfig(notesUrl + '/' + editedNote.id, editedNote,"PATCH")
+  // }
   addNewNote = () => {
     const newNote = {
       title: "add Title...", 
       body: "Add description..."
-    }
+    } 
+    this.setState({
+      content: newNote
+    })
+  }
+  // addNewNote = () => {
+  //   const newNote = {
+  //     title: "add Title...", 
+  //     body: "Add description..."
+  //   }
+  //   post(notesUrl, newNote)
+  //   .then(notes => this.setState({
+  //     notes: [...this.state.notes, notes],
+  //     // empty content display Instructions components in Content component based on the condition 
+  //     content: ""
+  //   }))
+  // }
+  createNote = (newNote) => {
     post(notesUrl, newNote)
     .then(notes => this.setState({
       notes: [...this.state.notes, notes],
@@ -94,6 +135,7 @@ class NoteContainer extends Component {
             newNote={this.addNewNote} />
           <Content 
             note={this.state.content} 
+            display={this.state.displayNote}
             updateNote={this.updateNote}
             removeNote={this.removeNote}
           />
