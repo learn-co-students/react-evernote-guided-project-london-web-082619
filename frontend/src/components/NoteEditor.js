@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 class NoteEditor extends Component {
   state = {
+    category: '',
     title: '',
     body: '',
     id: null
@@ -13,13 +14,14 @@ class NoteEditor extends Component {
     // because the title, body and id in state are empty  the content will be empty so
     // we rerender the previos value from props.note then we can edit the state by submit 
     this.setState({
+      category: this.props.note.category,
       title: this.props.note.title,
       body: this.props.note.body,
       id: this.props.note.id
     })
   }
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.props.note)
+    
     // this is called whenever props or state changes
 
     // we need to store the new note in state
@@ -27,6 +29,7 @@ class NoteEditor extends Component {
     if(this.state.id !== this.props.note.id){
 
       this.setState({
+        category: this.props.note.category,
         title: this.props.note.title,
         body: this.props.note.body,
         id: this.props.note.id
@@ -46,6 +49,7 @@ class NoteEditor extends Component {
   render() {
     return (
       <form className="note-editor" onSubmit={this.handleSubmit}>
+        <input type="text" name="category" onChange={this.handleChange} value={this.state.category}/>
         <input type="text" name="title" onChange={this.handleChange} value={this.state.title}/>
         <textarea name="body" onChange={this.handleChange} value={this.state.body}/>
         <div className="button-row">

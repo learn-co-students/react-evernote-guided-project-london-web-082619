@@ -28,14 +28,15 @@ class NoteContainer extends Component {
     content: null,
     displayNote: "instructions",
     filterNotes: [],
-    isFiltered: false
+    isFiltered: false,
   }
 
   getNotes = () => get(notesUrl).then(notes => this.setState({notes}));
 
   componentDidMount() { 
     this.getNotes()
-   }
+  }
+  
   /***************************************************************************************/
 
   displayContent = (selectedNote, changeDisplay) => {
@@ -50,13 +51,13 @@ class NoteContainer extends Component {
     if(this.state.notes.find(note => note.id === editedNote.id)){
       this.setState({
         notes: this.state.notes.map(note => {
-          
+          //create a new array and return all note with updated note. if we delete return note the array will be undefine exept the edited note
           if (note.id === editedNote.id) 
             return editedNote
           else
             return note
         }),
-        content: editedNote
+        content: editedNote,
       })
       fetchConfig(notesUrl + '/' + editedNote.id, editedNote,"PATCH")
     }else {
@@ -64,42 +65,21 @@ class NoteContainer extends Component {
     }
 
   }
-  // updateNote = (editedNote) => {
-  //   console.log(editedNote)
-  //   this.setState({
-  //     notes: this.state.notes.map(note => {
-  //       // [note, note, editedNote, note] so if the note match edited note change it
-  //       if (note.id === editedNote.id) 
-  //         return editedNote
-  //       else
-  //         return note
-  //     }),
-  //     content: editedNote
-  //   })
-  //   fetchConfig(notesUrl + '/' + editedNote.id, editedNote,"PATCH")
-  // }
+
   addNewNote = () => {
     const newNote = {
+      category: "Add Category...",
       title: "add Title...", 
       body: "Add description..."
+    
     } 
     this.setState({
       content: newNote
     })
   }
-  // addNewNote = () => {
-  //   const newNote = {
-  //     title: "add Title...", 
-  //     body: "Add description..."
-  //   }
-  //   post(notesUrl, newNote)
-  //   .then(notes => this.setState({
-  //     notes: [...this.state.notes, notes],
-  //     // empty content display Instructions components in Content component based on the condition 
-  //     content: ""
-  //   }))
-  // }
+
   createNote = (newNote) => {
+    console.log(newNote)
     post(notesUrl, newNote)
     .then(notes => this.setState({
       notes: [...this.state.notes, notes],
@@ -116,29 +96,52 @@ class NoteContainer extends Component {
       content: ""
     }))
   }
-  search = (noteTitle) => {
 
+  search = (noteTitle) => {
     this.setState({
       filterNotes: this.state.notes.filter(note => note.title.toLocaleLowerCase().includes(noteTitle)),
       isFiltered: true
     })
-    
   }
+
+
+  categoryType =(type) =>{
+    console.log(type)
+    if(type === "All"){
+      this.setState({
+        isFiltered: false
+      })
+    }else {
+
+      this.setState({
+        isFiltered: true,
+        filterNotes: this.state.notes.filter(note=> note.category === type
+        )
+      })
+    }
+  }
+
   render() {
     const listNotes = this.state.isFiltered ? this.state.filterNotes : this.state.notes
     return (
       <Fragment>
-        <Search search={this.search}/>
+        <Search search={this.search}
+          handleAll={this.categoryType}
+          handleWork={this.categoryType}
+          handleIdea={this.categoryType}
+          handlePlan={this.categoryType}
+        />
         <div className='container'>
-          <Sidebar notes={listNotes} 
-            selectedNote={this.displayContent} 
-            newNote={this.addNewNote} />
-          <Content 
-            note={this.state.content} 
-            display={this.state.displayNote}
-            updateNote={this.updateNote}
-            removeNote={this.removeNote}
-          />
+        
+        <Sidebar notes={listNotes} 
+          selectedNote={this.displayContent} 
+          newNote={this.addNewNote} />
+        <Content 
+          note={this.state.content} 
+          display={this.state.displayNote}
+          updateNote={this.updateNote}
+          removeNote={this.removeNote}
+        />
         </div>
       </Fragment>
     );

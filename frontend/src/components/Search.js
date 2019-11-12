@@ -1,4 +1,6 @@
 import React from 'react';
+import CategoryType from '../CategoryType';
+
 
 const Search = (props) => {
   return (
@@ -8,6 +10,13 @@ const Search = (props) => {
         type="text"
         placeholder="Search Notes"
       />
+      <div className="category">
+
+      <CategoryType handleAll={()=> props.handleAll('All')} 
+        handleWork={()=> props.handleWork("Work")} 
+        handleIdea={()=> props.handleIdea("Idea")} 
+        handlePlan={()=> props.handlePlan("Plan")}/>
+      </div>
     </div>
   );
 }

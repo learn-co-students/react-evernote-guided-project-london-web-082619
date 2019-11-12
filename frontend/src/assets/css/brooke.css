@@ -8,6 +8,9 @@
 * {
   font-family: 'Didact Gothic'
 }
+.category {
+  width: stretch;
+}
 
 body {
   margin: 0;
