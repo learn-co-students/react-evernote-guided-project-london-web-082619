@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Dropdown } from 'semantic-ui-react'
+
+
 
 class NoteEditor extends Component {
   state = {
@@ -8,7 +11,13 @@ class NoteEditor extends Component {
     id: null
   }
 
-  handleChange = (e) => this.setState({ [e.target.name]: e.target.value})
+  handleChange = (e, data) => {
+    if (data) {
+      this.setState({ [data.name]: data.value})
+    } else {
+      this.setState({ [e.target.name]: e.target.value})
+    }
+  }
 
   componentDidMount() {
     // because the title, body and id in state are empty  the content will be empty so
@@ -49,8 +58,30 @@ class NoteEditor extends Component {
   render() {
     return (
       <form className="note-editor" onSubmit={this.handleSubmit}>
-        <input type="text" name="category" onChange={this.handleChange} value={this.state.category}/>
         <input type="text" name="title" onChange={this.handleChange} value={this.state.title}/>
+        
+      <Dropdown
+        placeholder='Select Category'
+        fluid
+        selection
+        name="category"
+        onChange={this.handleChange}
+        value={this.state.category}
+        options={[
+          {
+            text: 'Work',
+            value: 'Work'
+          },
+          {
+            text: 'Idea',
+            value: 'Idea'
+          },
+          {
+            text: 'Plan',
+            value: 'Plan'
+          }
+        ]}
+      />
         <textarea name="body" onChange={this.handleChange} value={this.state.body}/>
         <div className="button-row">
           <input className="button" type="submit" value="Save" />
