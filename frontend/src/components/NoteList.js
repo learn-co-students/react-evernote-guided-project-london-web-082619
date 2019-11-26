@@ -1,11 +1,11 @@
 import React from 'react';
 import NoteItem from './NoteItem';
 
-const NoteList = (props) => {
+const NoteList = ({notes, selectedNote}) => {
   return (
     <ul>
-      {/* Render list of notes here... */}
-      <NoteItem />
+      {notes.map(note => <NoteItem key={note.id} {...note} noteItem={()=> selectedNote(note)}/>)}
+      
     </ul>
   );
 }

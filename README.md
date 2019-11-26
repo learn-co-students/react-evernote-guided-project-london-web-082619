@@ -117,3 +117,10 @@ Some suggestions:
 - Rich text formatting
 - Tagging
 - Emailing notes
+
+
+
+New note
+Automatically selected
+AND editable
+AND not saved in backend until user saves it
