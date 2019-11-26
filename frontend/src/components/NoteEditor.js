@@ -30,8 +30,7 @@ class NoteEditor extends Component {
     })
   }
   componentDidUpdate(prevProps, prevState) {
-    
-    // this is called whenever props or state changes
+        // this is called whenever props or state changes
 
     // we need to store the new note in state
     // when props.note is a newly-selected note
